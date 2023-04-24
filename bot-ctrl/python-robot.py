@@ -19,6 +19,7 @@ from threading import Thread, Event
 from time import sleep
 import math
 import rel
+import sys
 
 # client = ScraperAPIClient('10dad45271d09cdbf8aa4f8c7f284fcc')
 API_KEY = '10dad45271d09cdbf8aa4f8c7f284fcc'
@@ -55,6 +56,8 @@ class Robot(Thread):
                 # Receive a message from the server
                 time.sleep(0.5)
                 if self.event.is_set():
+                    self.ws.send(json.dumps(
+                                    {'email': 'email', 'name': name, 'passport': passport, 'log': 'closed'}))
                     self.browser.close()
                     print('The thread was stopped prematurely. robot stopped')
                     break
@@ -198,12 +201,13 @@ class Robot(Thread):
                                     time.sleep(0.01)
 
                             else:
+                    
                                 log_text += RMessage
                                 print(log_text)
                                 # self.ws.send(RMessage)
                                 self.ws.send(json.dumps(
                                     {'email': email, 'name': name, 'passport': passport, 'log': RMessage}))
-                                time.sleep(0.01)
+                                time.sleep(600)
 
                                 self.signOut()
                                 time.sleep(1)
@@ -251,6 +255,8 @@ class Robot(Thread):
 
         except KeyboardInterrupt:
             self.ws.close()
+            self.ws.send(json.dumps(
+                                    {'email': 'email', 'name': name, 'passport': passport, 'log': 'closed'}))
             self.browser.close()
             sys.exit()
 
@@ -522,14 +528,23 @@ class Manage:
     def on_message(self, ws, message):
         print(message, 'message arrived')
 
-        # stop the child thread
-        self.event.set()
+        if message=='close':
+            # stop the child thread
+            self.event.set()
 
-        # suspend  the thread after 3 seconds
-        time.sleep(5)
+            # suspend  the thread after 3 seconds
+            time.sleep(5)
 
-        self.restart(message)
-        # self.ws.close()
+        else:
+            # stop the child thread
+            self.event.set()
+
+            # suspend  the thread after 3 seconds
+            time.sleep(5)
+
+            self.restart(message)
+            # self.ws.close()
+        
 
     def restart(self, data):
         options = webdriver.ChromeOptions()
