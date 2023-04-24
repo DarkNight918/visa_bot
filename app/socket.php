@@ -93,16 +93,7 @@ class Socket implements MessageComponentInterface {
                 $result = array();
                 // Generate a new array
                 foreach ($users as $key => $user) {
-                    // if ($type == null) {
-                    //     $row = array(
-                    //         'email' => $user['email'],
-                    //         'password' => $user['password'],
-                    //         'name' => $user['firstname'] . ' ' . $user['lastname'],
-                    //         'passport' => $user['passport'],
-                    //         'latest_day' => $user['latest_day'],
-                    //     );
-                    //     array_push($result, $row);
-                    // } else {
+                    if ($type) {
                         $row = array(
                             'email' => $user['email'],
                             'password' => $user['password'],
@@ -112,7 +103,17 @@ class Socket implements MessageComponentInterface {
                             'type' => $type,
                         );
                         array_push($result, $row);
-                    // }
+                    } else {
+                        $row = array(
+                            'email' => $user['email'],
+                            'password' => $user['password'],
+                            'name' => $user['firstname'] . ' ' . $user['lastname'],
+                            'passport' => $user['passport'],
+                            'latest_day' => $user['latest_day'],
+                            'type' => "off",
+                        );
+                        array_push($result, $row);
+                    }
                 }
                 echo "Sending data successfully prepared\n";
                 // Broadcast to the clients who are connecting to this socket server (but for bots)
@@ -165,12 +166,7 @@ class Socket implements MessageComponentInterface {
             return;
         }
 
-        // Set interval 5 times
-        for ($i = 1; $i <= 5; $i ++) {
-            $this->sendLogToBrowser($from, $msg);
-            // Wait for 200 milliseconds
-            sleep(0.2);
-        }
+        $this->sendLogToBrowser($from, $msg);
     }
 
     public function onClose(ConnectionInterface $conn) {

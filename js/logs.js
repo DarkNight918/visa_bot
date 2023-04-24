@@ -106,6 +106,7 @@ $(document).ready(function () {
     const data = JSON.parse(e.data);
     console.log(data);
     if (data.to === "browser2") {
+      console.log(data)
       toastr.info("New activity log has arrived", "Alert!");
       LogsModule.updateTable(data.row_data);
       isBotRunning = true;
