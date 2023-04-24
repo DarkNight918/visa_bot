@@ -176,7 +176,7 @@ function getAllBots() {
             $dom .= '<tr class="border border-solid border-gray-300">' .
                 '<td class="py-[12px]">' . $index . '</td>' .
                 '<td class="py-[12px]">' . $row['email'] . '</td>' .
-                '<td class="py-[12px]">' . $row['password'] . '</td>' .
+                '<td class="py-[12px]" data-password="' . $row['password'] . '">***</td>' .
                 '<td class="py-[12px]">' .
                     '<div class="relative inline-block text-left">' .
                         '<div>' .

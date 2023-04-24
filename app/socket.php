@@ -80,7 +80,7 @@ class Socket implements MessageComponentInterface {
         // receive message from client
         echo "Received new message : $msg\n";
         
-        if(strpos($msg, 'admin-call-bot') !== false) {
+        if (strpos($msg, 'admin-call-bot') !== false) {
             $sql = 'SELECT firstname, lastname, passport, latest_day, email, password, status FROM tbl_users LEFT JOIN tbl_bots ON tbl_users.bot_id = tbl_bots.id WHERE ISNULL(email) = FALSE AND status = 1 ORDER BY priority';
             $users = $this->sqlConn->query($sql);
             if (strpos($msg, ":") !== false) {
@@ -147,6 +147,20 @@ class Socket implements MessageComponentInterface {
                         )
                    )
                 );
+            }
+            return;
+        }
+
+        if (strpos($msg, 'admin-stop-bot') !== false) {
+            foreach ($this->clients as $client ) {
+                echo $client->resourceId;
+                if ( $from->resourceId == $client->resourceId ) {
+                    continue;
+                }
+                echo "Data sent to client No." . $client->resourceId . "\n";
+                // $result = array(array('email'=>"ddd@ddd.com", 'password'=>'ddd', 'name'=>'ok', 'passport'=>'99','latest_day'=>'2023-10-01'));
+                
+                $client->send("close-bot");
             }
             return;
         }

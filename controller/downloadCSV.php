@@ -23,7 +23,7 @@ while ($row = $result->fetch_assoc()) {
         $row['name'],
         $row['passport'],
         $row['log'],
-        $dateTimeString
+        '"' . $dateTimeString . '"'
     );
     fputcsv($fp, $data);
 }

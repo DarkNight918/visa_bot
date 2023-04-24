@@ -401,6 +401,9 @@ var HomeModule = (function () {
         socket.send("admin-call-bot:off");
       }
     });
+    $("#stop-bot").on("click", function (e) {
+      socket.send("admin-stop-bot");
+    });
   };
 
   //

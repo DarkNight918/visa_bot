@@ -8,6 +8,8 @@ $result = $conn->query($sql);
 $dom = '';
 if ($result->num_rows > 0) {
     $index = 1;
+    // Set timezone to EST
+    date_default_timezone_set('America/New_York');
     while ($row = $result->fetch_assoc()) {
         // $dateTime = new DateTime();
         // $dateTime->setTimestamp((int)$row['created_at'] / 1000);
